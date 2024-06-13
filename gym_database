@@ -1,0 +1,137 @@
+#task 1
+import sqlite3  # Assuming SQLite for demonstration purposes, you can replace this with appropriate database library
+
+def add_member(id, name, age, trainer_id):
+    try:
+        # Connect to the gym's database
+        conn = sqlite3.connect('gym_database.db')
+        cursor = conn.cursor()
+
+        # Check if the member ID already exists
+        cursor.execute("SELECT COUNT(*) FROM Members WHERE id = ?", (id,))
+        if cursor.fetchone()[0] > 0:
+            print("Error: Member ID already exists.")
+            return
+
+        # Insert the new member into the Members table
+        cursor.execute("INSERT INTO Members (id, name, age, trainer_id) VALUES (?, ?, ?, ?)",
+                       (id, name, age, trainer_id))
+
+        # Commit the transaction
+        conn.commit()
+        print("Member added successfully.")
+
+    except sqlite3.Error as e:
+        print("Error:", e)
+    finally:
+        # Close the database connection
+        if conn:
+            conn.close()
+
+# Example usage
+add_member(1, 'Dua Lipa', 25, 101)  # Assuming trainer_id 101 exists
+
+
+#task 2
+
+import sqlite3  # Assuming SQLite for demonstration purposes, you can replace this with appropriate database library
+
+def add_workout_session(member_id, date, duration_minutes, calories_burned):
+    try:
+        # Connect to the gym's database
+        conn = sqlite3.connect('gym_database.db')
+        cursor = conn.cursor()
+
+        # Check if the member ID exists
+        cursor.execute("SELECT COUNT(*) FROM Members WHERE id = ?", (member_id,))
+        if cursor.fetchone()[0] == 0:
+            print("Error: Invalid member ID.")
+            return
+
+        # Insert the new workout session into the WorkoutSessions table
+        cursor.execute("INSERT INTO WorkoutSessions (member_id, date, duration_minutes, calories_burned) VALUES (?, ?, ?, ?)",
+                       (member_id, date, duration_minutes, calories_burned))
+
+        # Commit the transaction
+        conn.commit()
+        print("Workout session added successfully.")
+
+    except sqlite3.Error as e:
+        print("Error:", e)
+    finally:
+        # Close the database connection
+        if conn:
+            conn.close()
+
+# Example usage
+add_workout_session(1, '2024-06-13', 60, 300)  # Assuming member_id 1 exists
+
+
+#task 3
+
+import sqlite3  # Assuming SQLite for demonstration purposes, you can replace this with appropriate database library
+
+def update_member_age(member_id, new_age):
+    try:
+        # Connect to the gym's database
+        conn = sqlite3.connect('gym_database.db')
+        cursor = conn.cursor()
+
+        # Check if the member ID exists
+        cursor.execute("SELECT COUNT(*) FROM Members WHERE id = ?", (member_id,))
+        if cursor.fetchone()[0] == 0:
+            print("Error: Member does not exist.")
+            return
+
+        # Update the age of the member
+        cursor.execute("UPDATE Members SET age = ? WHERE id = ?", (new_age, member_id))
+
+        # Commit the transaction
+        conn.commit()
+        print("Member age updated successfully.")
+
+    except sqlite3.Error as e:
+        print("Error:", e)
+    finally:
+        # Close the database connection
+        if conn:
+            conn.close()
+
+# Example usage
+update_member_age(1, 30)  # Assuming member_id 1 exists and you're updating age to 30
+
+
+#task 4
+
+import sqlite3  # Assuming SQLite for demonstration purposes, you can replace this with appropriate database library
+
+def delete_workout_session(session_id):
+    try:
+        # Connect to the gym's database
+        conn = sqlite3.connect('gym_database.db')
+        cursor = conn.cursor()
+
+        # Check if the session ID exists
+        cursor.execute("SELECT COUNT(*) FROM WorkoutSessions WHERE session_id = ?", (session_id,))
+        if cursor.fetchone()[0] == 0:
+            print("Error: Session ID does not exist.")
+            return
+
+        # Delete the workout session
+        cursor.execute("DELETE FROM WorkoutSessions WHERE session_id = ?", (session_id,))
+
+        # Commit the transaction
+        conn.commit()
+        print("Workout session deleted successfully.")
+
+    except sqlite3.Error as e:
+        print("Error:", e)
+    finally:
+        # Close the database connection
+        if conn:
+            conn.close()
+
+# Example usage
+delete_workout_session(1)  # Assuming session_id 1 exists
+
+
